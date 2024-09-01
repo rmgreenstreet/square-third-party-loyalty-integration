@@ -1,0 +1,48 @@
+# Node modules
+/node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# Directory for build output
+/dist/
+/build/
+
+# Dependency directories
+/bower_components/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/editor configurations
+.vscode/
+.idea/
+
+# Operating system files
+*.swp
+*.swo
+
+# Coverage reports
+/coverage/
+
+# Jest snapshot files
+*.snap
+
+# Miscellaneous
+*.tgz
+*.gz
+
+# Ignore any files that are not explicitly included in the repository
+*.tmp
+*.bak
+*.old
+
+# Exclude other directories or files as needed

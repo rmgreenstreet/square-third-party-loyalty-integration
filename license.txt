@@ -1,0 +1,44 @@
+Copyright 2024 Robert Greenstreet
+
+All rights reserved.
+
+LICENSE AGREEMENT
+
+This License Agreement ("Agreement") is between Robert Greenstreet ("Licensor") and the individual or entity ("Licensee") who agrees to the terms and conditions set forth below.
+
+1. **License Grant**
+   Licensor grants Licensee a non-exclusive, non-transferable license to use the software identified as [Your App Name] (the "Software") for the purpose of [describe the purpose, e.g., "personal use" or "internal business operations"].
+
+2. **Restrictions**
+   - Licensee shall not reproduce, distribute, or sell the Software or any part thereof, without prior written consent from Licensor.
+   - Licensee shall not modify, reverse-engineer, disassemble, or decompile the Software.
+   - Licensee shall not use the Software in any way that violates applicable laws or regulations.
+
+3. **Subscription**
+   The Licensee may be required to pay a subscription fee for the continued use of the Software. The terms of such subscription and payment details will be provided separately.
+
+4. **Ownership**
+   The Software is licensed, not sold. All rights, title, and interest in and to the Software, including any associated intellectual property rights, remain with Licensor.
+
+5. **Termination**
+   Licensor may terminate this Agreement if Licensee fails to comply with any of the terms and conditions. Upon termination, Licensee must cease all use of the Software and destroy all copies in their possession.
+
+6. **Disclaimer of Warranty**
+   The Software is provided "as is," without warranty of any kind. Licensor does not guarantee that the Software will be error-free or meet Licensee's requirements.
+
+7. **Limitation of Liability**
+   Licensor shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with the use of the Software, even if advised of the possibility of such damages.
+
+8. **Governing Law**
+   This Agreement shall be governed by and construed in accordance with the laws of The United States of America, without regard to its conflict of law principles.
+
+9. **Contact Information**
+   For questions or support regarding the Software, please contact:
+   greenstreetimagining@gmail.com
+
+By using the Software, Licensee agrees to the terms of this Agreement.
+
+Robert Greenstreet
+greenstreetimagining@gmail.com
+September 1, 2024
+
