@@ -1,8 +1,8 @@
-# My App
+# Square Third-party Loyalty Integration
 
 ## Overview
 
-My App is a Node.js application that integrates with the Square API, provides user authentication and authorization, and offers a subscription-based service. It utilizes Express for server management, Mongoose for MongoDB interactions, and Passport for local authentication.
+Square Third-party Loyalty Integration allows Square sellers to offer a loyalty program to their customers, even if they use a third-party app that doesn't include integration with Square's Loyalty capabilities.
 
 ## Features
 
