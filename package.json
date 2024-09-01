@@ -2,7 +2,7 @@
   "name": "square-third-party-loyalty-integration",
   "version": "1.0.0",
   "description": "Integrate your third-party solutions with your customer loyalty program within Square",
-  "main": "index.mjs",
+  "main": "src/app.mjs",
   "directories": {
     "test": "tests"
   },
@@ -12,6 +12,10 @@
   "author": "Robert Greenstreet",
   "license": "SEE LICENSE IN LICENSE.TXT",
   "repository": "https://github.com/rmgreenstreet/square-third-party-loyalty-integration.git",
+  "bugs": {
+    "url": "https://github.com/rmgreenstreet/square-third-party-loyalty-integration/issues"
+  },
+  "homepage": "https://github.com/rmgreenstreet/square-third-party-loyalty-integration",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
