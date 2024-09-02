@@ -26,7 +26,11 @@ export const postRegister = async (req, res) => {
     const newUser = new User({email});
     // passport-local register and login logic
     const registeredUser = await User.register(newUser, password);
-    registeredUser.authenticate();
+    req.login(registeredUser, err => {
+      if(err) {
+        return next(err);
+      }
+    });
     res.redirect('/');
   } catch (error) {
     console.log(error);
@@ -48,11 +52,12 @@ export const getLogin = async (req, res) => {
   };
 };
 
-export const postLogin = async (req, res) => {
-  // passport-local login logic
-};
-
 export const getLogout = (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.logout(function (err) {
+    if (err) {
+        return next(err);
+    }
+    req.flash('success', 'You are now logged out');
+    res.redirect('/login');
+});
 };

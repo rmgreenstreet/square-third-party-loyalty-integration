@@ -3,8 +3,12 @@ import User from '../models/User.mjs';
 import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
 
 // Initialize Square client
+const environment = process.env.NODE_ENV === 'production'
+  ? Environment.Production
+  : Environment.Sandbox;
+
 const client = new Client({
-  environment: Environment.Sandbox,
+  environment,
   accessToken: process.env.SQUARE_ACCESS_TOKEN
 });
 
