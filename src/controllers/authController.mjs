@@ -1,15 +1,14 @@
 import { isAuthorized } from "../utils/squareUtils.mjs"
+import User from "../models/User.mjs";
 
-export const home = async (req, res) => {
+export const getHome = async (req, res) => {
   try {
-    if (req.user) {
-      const isAuthorized = await isAuthorized(req.user);
-      res.render("index", isAuthorized);
-    } else {
-      res.redirect("/login");
-    }
+    const squareAuthorization = await isAuthorized(req.user);
+    res.render("index", squareAuthorization);
   } catch (error) {
-    res.status(500).send('Server Error');
+    console.log(error);
+    req.flash("error", "There was an error verifying Square Integration");
+    res.status(500).redirect("/login");
   }
 };
 
@@ -18,16 +17,21 @@ export const getRegister = async (req, res) => {
     req.flash = "You are already logged in";
     res.redirect('/');
   };
-  res.render("/users/register");
+  res.render("users/register");
 };
 
 export const postRegister = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
+    const newUser = new User({email});
     // passport-local register and login logic
+    const registeredUser = await User.register(newUser, password);
+    registeredUser.authenticate();
     res.redirect('/');
   } catch (error) {
-    res.status(500).send('Server Error');
+    console.log(error);
+    req.flash("error", `There was an error creating your account: ${error.message}`);
+    res.status(500).redirect("/register");
   }
 };
 
@@ -39,6 +43,7 @@ export const getLogin = async (req, res) => {
       res.render("users/login");
     }
   } catch (error) {
+    console.log(error);
     res.status(500).send('Server Error');
   };
 };
@@ -47,7 +52,7 @@ export const postLogin = async (req, res) => {
   // passport-local login logic
 };
 
-export const logout = (req, res) => {
+export const getLogout = (req, res) => {
   req.logout();
   res.redirect('/');
 };

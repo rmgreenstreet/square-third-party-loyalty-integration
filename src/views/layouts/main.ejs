@@ -42,6 +42,20 @@
     </nav>
   </header>
   <main class="container">
+    <div class="row">
+      <div class="col flash-message">
+        <% if (success) { %>
+          <div class="alert alert-success">
+            <%= success %>
+          </div>
+        <% } %>
+        <% if (error) { %>
+          <div class="alert alert-danger">
+            <%= error %>
+          </div>
+        <% } %>
+      </div>
+    </div>
     <%- body -%>
   </main>
   <footer class="container my-3">

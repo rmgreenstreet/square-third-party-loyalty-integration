@@ -1,13 +1,18 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import mongoose from 'mongoose';
 import session from 'express-session';
 import connectFlash from 'connect-flash';
-import passport from 'passport';
+import passport from "passport";
+import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
+import methodOverride from "method-override";
+import flash from "connect-flash";
+
 import authRoutes from './routes/authRoutes.mjs';
 import squareRoutes from './routes/squareRoutes.mjs';
+
+import User from "./models/User.mjs"
 
 // Get the resolved path to the file and directory
 const __filename = fileURLToPath(import.meta.url);
@@ -24,6 +29,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Middleware and routes setup
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -45,10 +52,20 @@ if (app.get('env') === 'production') {
 };
 
 app.use(session(sess));
+app.use(flash());
 
 app.use(connectFlash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.use(new LocalStrategy({
+  usernameField: "email"
+},
+  User.authenticate()
+));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Use the routes
 app.use('/', authRoutes);

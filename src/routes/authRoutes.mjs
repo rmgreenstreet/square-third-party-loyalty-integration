@@ -1,13 +1,16 @@
+import passport from "passport";
 import { Router } from 'express';
-import { getRegister, postRegister, getLogin, postLogin, logout, home } from '../controllers/authController.mjs';
+import { getRegister, postRegister, getLogin, postLogin, getLogout, getHome } from '../controllers/authController.mjs';
+import catchAsync from "../utils/catchAsync.mjs";
+import { isLoggedIn } from "../middleware/isLoggedIn.mjs";
 
 const router = Router();
 
-router.get("/", home);
+router.get("/", isLoggedIn, getHome);
 router.get("/register", getRegister);
-router.post('/register', postRegister);
+router.post('/register', catchAsync(postRegister));
 router.get("/login", getLogin);
-router.post('/login', postLogin);
-router.get('/logout', logout);
+router.post('/login', passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}));
+router.get('/logout', getLogout);
 
 export default router;
