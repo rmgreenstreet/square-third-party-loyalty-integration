@@ -10,7 +10,7 @@ const client = new Client({
 
 export const authorize = async (req, res) => {
   try {
-    const authorizationUrl = `https://connect.squareup.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=CUSTOMERS_READ ORDERS_READ LOYALTY_READ LOYALTY_WRITE&state=${req.sessionID}`;
+    const authorizationUrl = `https://connect.squareup.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ CUSTOMERS_READ ORDERS_READ LOYALTY_READ LOYALTY_WRITE&state=${req.sessionID}`;
     res.redirect(authorizationUrl);
   } catch (error) {
     res.status(500).send('Authorization Error');
