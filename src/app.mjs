@@ -76,7 +76,7 @@ app.use((req, res, next) => {
   next();
 });
 
-connectToMongoose(1000)
+await connectToMongoose(1000);
 
 // Use the routes
 app.use('/', authRoutes);
