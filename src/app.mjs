@@ -82,6 +82,15 @@ await connectToMongoose(1000);
 app.use('/', authRoutes);
 app.use('/square', squareRoutes);
 
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+app.all("*", (req, res) => {
+  console.log("Invalid path request for", req.path);
+  res.status(404).send("Invalid path");
+})
+
 // Error handling and other middlewares
 
 const PORT = process.env.PORT || 3000;
