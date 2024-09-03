@@ -4,7 +4,7 @@ import User from "../models/User.mjs";
 export const getHome = async (req, res) => {
   try {
     const squareAuthorization = await isAuthorized(req.user);
-    res.render("index", squareAuthorization);
+    res.render("index", { squareAuthorization });
   } catch (error) {
     console.log(error);
     req.flash("error", "There was an error verifying Square Integration");

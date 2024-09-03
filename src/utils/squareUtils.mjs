@@ -1,11 +1,16 @@
-import { Client } from 'square';
+import { Client, Environment } from 'square';
 import { encrypt, decrypt } from './tokenUtils.mjs';
 
-// Initialize the Square client using the user's tokens
-export const createSquareClient = (accessToken) => {
+
+// Initialize Square client
+const environment = process.env.NODE_ENV === 'production'
+  ? Environment.Production
+  : Environment.Sandbox;
+
+export const createSquareClient = async (accessToken) => {
   return new Client({
-    accessToken: decrypt(accessToken),
-    environment: process.env.SQUARE_ENVIRONMENT || 'sandbox',
+    environment,
+    accessToken: accessToken
   });
 };
 

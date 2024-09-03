@@ -1,16 +1,8 @@
-import { Client, Environment } from 'square';
 import User from '../models/User.mjs';
 import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
+import { createSquareClient } from '../utils/squareUtils.mjs';
 
-// Initialize Square client
-const environment = process.env.NODE_ENV === 'production'
-  ? Environment.Production
-  : Environment.Sandbox;
-
-const client = new Client({
-  environment,
-  accessToken: process.env.SQUARE_ACCESS_TOKEN
-});
+const client = await createSquareClient(process.env.SQUARE_CLIENT_ID)
 
 export const authorize = async (req, res) => {
   try {

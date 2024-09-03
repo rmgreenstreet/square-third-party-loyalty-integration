@@ -9,6 +9,8 @@ import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
 
+import connectToMongoose from './utils/connectToMongoose.mjs';
+
 import authRoutes from './routes/authRoutes.mjs';
 import squareRoutes from './routes/squareRoutes.mjs';
 
@@ -72,7 +74,9 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.user = req.user;
   next();
-})
+});
+
+connectToMongoose(1000)
 
 // Use the routes
 app.use('/', authRoutes);

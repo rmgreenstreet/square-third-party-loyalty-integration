@@ -10,7 +10,9 @@ router.get("/", isLoggedIn, getHome);
 router.get("/register", getRegister);
 router.post('/register', catchAsync(postRegister));
 router.get("/login", getLogin);
-router.post('/login', passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}));
+router.post('/login', passport.authenticate("local", {failureFlash: true, failureRedirect: "/login"}), (req,res) => {
+    res.redirect("/");
+});
 router.get('/logout', isLoggedIn, getLogout);
 
 export default router;
