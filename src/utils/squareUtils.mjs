@@ -15,7 +15,7 @@ export const createSquareClient = async (accessToken) => {
 };
 
 // Function to check if the user's Square account is authorized
-export const isAuthorized = async (user) => {
+export const isSquareAuthorized = async (user) => {
   if (!user.squareAccessToken || !user.squareRefreshToken) {
     return false;
   }

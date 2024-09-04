@@ -1,9 +1,9 @@
-import { isAuthorized } from "../utils/squareUtils.mjs"
+import { isSquareAuthorized } from "../utils/squareUtils.mjs"
 import User from "../models/User.mjs";
 
 export const getHome = async (req, res) => {
   try {
-    const squareAuthorization = await isAuthorized(req.user);
+    const squareAuthorization = await isSquareAuthorized(req.user);
     res.render("index", { squareAuthorization });
   } catch (error) {
     console.log(error);
