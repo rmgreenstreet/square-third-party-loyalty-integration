@@ -24,6 +24,7 @@ export const oauthCallback = async (req, res) => {
     const { code } = req.query;
     console.log(code);
     
+    console.log("Attempting to get OAuth Token");
     const response = await client.oauth2.getToken({ 
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
@@ -34,6 +35,7 @@ export const oauthCallback = async (req, res) => {
     const { access_token, refresh_token, expires_at } = response.result;
     const encryptedAccessToken = encrypt(access_token);
     
+    console.log("Attempting to save Tokens to User");
     const user = await User.findById(req.user._id);
     user.squareAccessToken = encryptedAccessToken;
     user.squareRefreshToken = refresh_token;
@@ -42,6 +44,7 @@ export const oauthCallback = async (req, res) => {
     
     res.redirect('/');
   } catch (error) {
+    console.log(error);
     res.status(500).send('OAuth Callback Error');
   }
 };
