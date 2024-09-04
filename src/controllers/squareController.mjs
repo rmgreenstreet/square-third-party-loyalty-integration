@@ -33,8 +33,9 @@ export const oauthCallback = async (req, res) => {
       redirectUri: process.env.SQUARE_REDIRECT_URI,
       grantType: "authorization_code"
     });
-
+    console.log("Tokens obtained. Encrypting and saving to database");
     const { access_token, refresh_token, expires_at } = response.result;
+    console.log("access_token, refresh_token, expires_at",access_token, refresh_token, expires_at)
     const encryptedAccessToken = encrypt(access_token);
     
     console.log("Attempting to save Tokens to User");
