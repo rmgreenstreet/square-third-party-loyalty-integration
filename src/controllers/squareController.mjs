@@ -3,7 +3,7 @@ import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
 import { createSquareClient } from '../utils/squareUtils.mjs';
 
 const client = await createSquareClient(process.env.SQUARE_CLIENT_ID);
-const { oauthApi } = client;
+const { OAuthApi } = client;
 const environment = process.env.NODE_ENV === 'production' ? "" : "sandbox";
 const sessionArg = environment === "sandbox" ? "" : "&session=false";
 
@@ -27,7 +27,7 @@ export const oauthCallback = async (req, res) => {
     console.log(code);
     
     console.log("Attempting to get OAuth Token");
-    const response = await oauthApi.obtainToken({ 
+    const response = await OAuthApi.obtainToken({ 
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
       clientSecret: process.env.SQUARE_CLIENT_SECRET,
@@ -56,7 +56,7 @@ export const revoke = async (req, res) => {
     const { user } = req;
     if (!user || !user.squareRefreshToken) return res.status(400).send('No token to revoke');
 
-    const response = await oauthApi.revokeToken({ 
+    const response = await OAuthApi.revokeToken({ 
       token: user.squareRefreshToken 
     });
     
