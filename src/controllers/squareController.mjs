@@ -18,9 +18,9 @@ export const authorize = async (req, res) => {
 export const oauthCallback = async (req, res) => {
   try {
     console.log("Entering oauthCallBack");
-    if (req.state !== req.sessionID) {
-      res.status(403).send("There was a security issue. Try the OAuth integration again");
-    }
+    // if (req.state !== req.sessionID) {
+    //   res.status(403).send("There was a security issue. Try the OAuth integration again");
+    // }
     const { code } = req.query;
     console.log(code);
     
