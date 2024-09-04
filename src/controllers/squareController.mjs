@@ -2,7 +2,8 @@ import User from '../models/User.mjs';
 import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
 import { createSquareClient } from '../utils/squareUtils.mjs';
 
-const client = await createSquareClient(process.env.SQUARE_CLIENT_ID)
+const client = await createSquareClient(process.env.SQUARE_CLIENT_ID);
+const { oauthApi } = client;
 const environment = process.env.NODE_ENV === 'production' ? "" : "sandbox";
 const sessionArg = environment === "sandbox" ? "" : "&session=false";
 
@@ -18,6 +19,7 @@ export const authorize = async (req, res) => {
 export const oauthCallback = async (req, res) => {
   try {
     console.log("Entering oauthCallBack");
+    console.log("req:", req)
     // if (req.state !== req.sessionID) {
     //   res.status(403).send("There was a security issue. Try the OAuth integration again");
     // }
@@ -25,7 +27,7 @@ export const oauthCallback = async (req, res) => {
     console.log(code);
     
     console.log("Attempting to get OAuth Token");
-    const response = await client.oauth2.getToken({ 
+    const response = await oauthApi.getToken({ 
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
       clientSecret: process.env.SQUARE_CLIENT_SECRET,
@@ -54,7 +56,7 @@ export const revoke = async (req, res) => {
     const { user } = req;
     if (!user || !user.squareRefreshToken) return res.status(400).send('No token to revoke');
 
-    const response = await client.oauth2.revokeToken({ 
+    const response = await oauthApi.revokeToken({ 
       token: user.squareRefreshToken 
     });
     
