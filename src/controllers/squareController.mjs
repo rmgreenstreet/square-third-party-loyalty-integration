@@ -31,7 +31,7 @@ export const oauthCallback = async (req, res) => {
       clientId: process.env.SQUARE_CLIENT_ID,
       clientSecret: process.env.SQUARE_CLIENT_SECRET,
       redirectUri: process.env.SQUARE_REDIRECT_URI,
-      grantType: "refresh_token"
+      grantType: "authorization_code"
     });
 
     const { access_token, refresh_token, expires_at } = response.result;
