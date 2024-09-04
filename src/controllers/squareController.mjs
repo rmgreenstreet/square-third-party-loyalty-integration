@@ -3,13 +3,12 @@ import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
 import { createSquareClient } from '../utils/squareUtils.mjs';
 
 const client = await createSquareClient(process.env.SQUARE_CLIENT_ID)
-const environment = process.env.NODE_ENV === 'production'
-  ? ""
-  : "sandbox";
+const environment = process.env.NODE_ENV === 'production' ? "" : "sandbox";
+const sessionArg = environment === "sandbox" ? "" : "&session=false";
 
 export const authorize = async (req, res) => {
   try {
-    const authorizationUrl = `https://connect.squareup${environment}.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ+CUSTOMERS_READ+ORDERS_READ+LOYALTY_READ+LOYALTY_WRITE&state=${req.sessionID}`;
+    const authorizationUrl = `https://connect.squareup${environment}.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ+CUSTOMERS_READ+ORDERS_READ+LOYALTY_READ+LOYALTY_WRITE&state=${req.sessionID}${sessionArg}`;
     res.redirect(authorizationUrl);
   } catch (error) {
     res.status(500).send('Authorization Error');
