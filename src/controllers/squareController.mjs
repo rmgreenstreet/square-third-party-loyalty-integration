@@ -27,7 +27,7 @@ export const oauthCallback = async (req, res) => {
     console.log(code);
     
     console.log("Attempting to get OAuth Token");
-    const response = await oauthApi.getToken({ 
+    const response = await oauthApi.obtainToken({ 
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
       clientSecret: process.env.SQUARE_CLIENT_SECRET,
