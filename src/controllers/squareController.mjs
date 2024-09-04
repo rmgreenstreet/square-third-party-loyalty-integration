@@ -9,7 +9,7 @@ const environment = process.env.NODE_ENV === 'production'
 
 export const authorize = async (req, res) => {
   try {
-    const authorizationUrl = `https://connect.squareup${environment}.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ+CUSTOMERS_READ+ORDERS_READ+LOYALTY_READ+LOYALTY_WRITE&state=${req.sessionID}&redirect_uri=${process.env.OAUTH_REDIRECT_URI}`;
+    const authorizationUrl = `https://connect.squareup${environment}.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ+CUSTOMERS_READ+ORDERS_READ+LOYALTY_READ+LOYALTY_WRITE&state=${req.sessionID}`;
     res.redirect(authorizationUrl);
   } catch (error) {
     res.status(500).send('Authorization Error');
