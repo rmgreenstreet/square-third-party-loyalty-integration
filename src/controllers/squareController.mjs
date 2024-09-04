@@ -35,14 +35,14 @@ export const oauthCallback = async (req, res) => {
     });
     console.log("obtainToken response:",response);
     console.log("Tokens obtained. Encrypting and saving to database");
-    const { access_token, refresh_token, expires_at } = response.result;
-    const encryptedAccessToken = encrypt(access_token);
+    const { accessToken, refreshToken, expiresAt } = response.result;
+    const encryptedAccessToken = encrypt(accessToken);
     
     console.log("Attempting to save Tokens to User");
     const user = await User.findById(req.user._id);
     user.squareAccessToken = encryptedAccessToken;
-    user.squareRefreshToken = refresh_token;
-    user.squareTokenExpiry = new Date(expires_at * 1000); // Convert to JavaScript Date
+    user.squareRefreshToken = refreshToken;
+    user.squareTokenExpiry = new Date(expiresAt * 1000); // Convert to JavaScript Date
     await user.save();
     
     res.redirect('/');
