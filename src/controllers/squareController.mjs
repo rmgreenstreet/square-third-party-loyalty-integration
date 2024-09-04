@@ -18,7 +18,9 @@ export const authorize = async (req, res) => {
 
 export const oauthCallback = async (req, res) => {
   try {
+    console.log("Entering oauthCallBack");
     const { code } = req.query;
+    console.log(code);
     
     const response = await client.oauth2.getToken({ 
       code,
