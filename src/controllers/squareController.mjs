@@ -42,7 +42,7 @@ export const oauthCallback = async (req, res) => {
     const user = await User.findById(req.user._id);
     user.squareAccessToken = encryptedAccessToken;
     user.squareRefreshToken = refreshToken;
-    user.squareTokenExpiry = new Date(expiresAt * 1000); // Convert to JavaScript Date
+    user.squareTokenExpiry = new Date(expiresAt); // Convert to JavaScript Date
     await user.save();
     
     res.redirect('/');
