@@ -1,3 +1,11 @@
+// Conditionally load dotenv only in development
+if (process.env.NODE_ENV !== 'production') {
+  import('dotenv').then(async ({ config }) => {
+    const dotenvConfig = await config(); // Load environment variables
+    console.log("dotenvConfig:", dotenvConfig);
+  });
+};
+
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -21,13 +29,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-
-// Conditionally load dotenv only in development
-if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then(({ config }) => {
-    config(); // Load environment variables
-  });
-}
 
 // Middleware and routes setup
 app.use(express.urlencoded({ extended: true }));

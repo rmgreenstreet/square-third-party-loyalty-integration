@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Integrate your third-party solutions with your customer loyalty program within Square",
   "main": "src/app.mjs",
+  "start": "node src/app.mjs",
   "directories": {
     "test": "tests"
   },
@@ -33,7 +34,7 @@
     "square": "^38.0.0"
   },
   "devDependencies": {
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.4.5",
     "jest": "^29.0.0",
     "supertest": "^6.3.3"
   }
