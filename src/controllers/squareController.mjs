@@ -24,9 +24,9 @@ export const oauthCallback = async (req, res) => {
     // }
     const { code } = req.query;
     console.log(code);
-    
+
     console.log("Attempting to get OAuth Token");
-    const response = await oAuthApi.obtainToken({ 
+    const response = await oAuthApi.obtainToken({
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
       clientSecret: process.env.SQUARE_CLIENT_SECRET,
@@ -36,7 +36,7 @@ export const oauthCallback = async (req, res) => {
     console.log("Tokens obtained. Encrypting and saving to database");
     const { accessToken, refreshToken, expiresAt } = response.result;
     const encryptedAccessToken = encrypt(accessToken);
-    
+
     console.log("Attempting to save Tokens to User");
     const user = await User.findById(req.user._id);
     user.squareAccessToken = encryptedAccessToken;
@@ -63,10 +63,11 @@ export const revoke = async (req, res) => {
     console.log("Attempting to revoke access token");
     const response = await oAuthApi.revokeToken({
       clientId: process.env.SQUARE_CLIENT_ID,
-      token: decrypt(user.squareAccessToken)
-    });
+      accessToken: decrypt(user.squareAccessToken)
+    },
+      null);
     console.log("revokeToken response:", response);
-    
+
     user.squareAccessToken = undefined;
     user.squareRefreshToken = undefined;
     user.squareTokenExpiry = undefined;
