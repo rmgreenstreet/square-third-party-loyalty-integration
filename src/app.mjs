@@ -19,7 +19,7 @@ import winston, { createLogger, format, transports } from "winston";
 import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
-// Import build utils
+// Import build database utils
 import connectToMongoose, { dbConnectOptions } from './utils/connectToMongoose.mjs';
 
 // Import routes
@@ -33,7 +33,7 @@ import User from "./models/User.mjs"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const mongooseConnection = await connectToMongoose(1000);
+await connectToMongoose(1000);
 
 const app = express();
 
