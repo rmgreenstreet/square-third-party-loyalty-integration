@@ -15,7 +15,7 @@ import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
-import { createLogger, format, transports } from "winston";
+import { winston, createLogger, format, transports } from "winston";
 import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
