@@ -43,7 +43,7 @@ export const oauthCallback = async (req, res) => {
     user.squareRefreshToken = refreshToken;
     user.squareTokenExpiry = new Date(expiresAt); // Convert to JavaScript Date
     await user.save();
-    console.log("Tokens saved to user");
+    console.log("Tokens saved to user. Redirecting to home page");
     res.redirect('/');
   } catch (error) {
     console.log(error);
