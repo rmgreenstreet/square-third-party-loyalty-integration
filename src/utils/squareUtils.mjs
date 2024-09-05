@@ -30,7 +30,7 @@ export const isSquareAuthorized = async (user) => {
     console.log("Attempting to retrieve customers")
     // Attempt to make an API call to check if the token is valid
     const response = await customersApi.listCustomers();
-    console.log("response.result:", response.result);
+    console.log("customersApi response.result:", response.result);
     return response.result ? true : false;
   } catch (error) {
     console.error('Error checking Square authorization:', error);

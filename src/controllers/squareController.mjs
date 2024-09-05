@@ -61,8 +61,9 @@ export const revoke = async (req, res) => {
       return res.status(400).send('No token to revoke');
     }
     console.log("Attempting to revoke access token");
-    const response = await oAuthApi.revokeToken({ 
-      token: decrypt(user.squareRefreshToken)
+    const response = await oAuthApi.revokeToken({
+      clientId: process.env.SQUARE_CLIENT_ID,
+      token: decrypt(user.squareAccessToken)
     });
     console.log("revokeToken response:", response);
     
