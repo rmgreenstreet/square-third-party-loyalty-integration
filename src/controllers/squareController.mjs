@@ -74,6 +74,7 @@ export const revoke = async (req, res) => {
     console.log("User saved, redirecting to home page");
     res.redirect('/');
   } catch (error) {
+    console.error("Error revoking token:", error);
     res.status(500).send('Revoke Error');
   }
 };
