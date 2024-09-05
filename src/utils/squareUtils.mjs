@@ -16,16 +16,21 @@ export const createSquareClient = async (accessToken) => {
 
 // Function to check if the user's Square account is authorized
 export const isSquareAuthorized = async (user) => {
+  console.log("entering isSquareAuthorized");
   if (!user.squareAccessToken || !user.squareRefreshToken) {
+    console.log("User does not have square access token");
     return false;
   }
-
+  console.log("User has square access token, attempting to decrypt and use it");
   try {
+    console.log("Initializing Square Client");
     const client = await createSquareClient(decrypt(user.squareAccessToken));
     const { customersApi } = client;
-
+    console.log("Square Client Initialized, customersApi:", customersApi);
+    console.log("Attempting to retrieve customers")
     // Attempt to make an API call to check if the token is valid
     const response = await customersApi.listCustomers();
+    console.log("response.result:", response.result);
     return response.result.customers ? true : false;
   } catch (error) {
     console.error('Error checking Square authorization:', error);
