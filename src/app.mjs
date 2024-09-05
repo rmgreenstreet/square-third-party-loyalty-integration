@@ -15,13 +15,12 @@ import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
-import winston from "winston";
-const { createLogger, format, transports } = winston ;
+import winston, { createLogger, format, transports } from "winston";
 import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
 // Import build utils
-import connectToMongoose from './utils/connectToMongoose.mjs';
+import connectToMongoose, { dbConnectOptions } from './utils/connectToMongoose.mjs';
 
 // Import routes
 import authRoutes from './routes/authRoutes.mjs';
@@ -44,11 +43,7 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 // Logging setup
-app.use(morgan({
-  collection: "httpLogs",
-  connectionString: process.env.DB_CONNECTION_STRING,
-  dbName: process.env.DB_NAME
-},
+app.use(morgan(dbConnectOptions,
   {},
   'dev'
 ));
@@ -66,8 +61,8 @@ const logger = createLogger({
   defaultMeta: { service: 'Square Third Party Loyalty Integration' }
 });
 
-console.log("attempting to pass mongooseConnection to winston:", mongooseConnection);
-logger.add(new winston.transports.MongoDB(mongooseConnection));
+console.log("attempting to pass mongooseConnection to winston");
+logger.add(new winston.transports.MongoDB(dbConnectOptions));
 
 //
 // If we're not in production then **ALSO** log to the `console`

@@ -1,5 +1,11 @@
 import mongoose from 'mongoose';
 
+export const dbConnectOptions = {
+  collection: "httpLogs",
+  connectionString: process.env.DB_CONNECTION_STRING,
+  dbName: process.env.DB_NAME
+};
+
 const maxRetries = 5; // Number of attempts
 
 async function connectToMongoose(delay = 250) { // Default delay value
