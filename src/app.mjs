@@ -1,8 +1,8 @@
 if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then(({ config }) => { 
+  import('dotenv').then(({ config }) => {
     config() // Load environment variables
   });
-}; 
+};
 
 // Import dependencies
 import express from 'express';
@@ -48,7 +48,8 @@ app.use(morgan({
   connectionString: process.env.DB_CONNECTION_STRING,
   dbName: process.env.DB_NAME
 },
- 'dev'
+  {},
+  'dev'
 ));
 
 const logger = createLogger({
@@ -64,7 +65,7 @@ const logger = createLogger({
   defaultMeta: { service: 'Square Third Party Loyalty Integration' }
 });
 
-logger.add (new winston.transports.MongoDB(mongooseConnection));
+logger.add(new winston.transports.MongoDB(mongooseConnection));
 
 //
 // If we're not in production then **ALSO** log to the `console`
