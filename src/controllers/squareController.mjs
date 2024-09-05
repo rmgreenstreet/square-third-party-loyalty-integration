@@ -54,9 +54,10 @@ export const oauthCallback = async (req, res) => {
 export const revoke = async (req, res) => {
   console.log("Entering token revoke route");
   try {
+    console.log("attempting to retrieve logged in user using req.user:", req.user);
     const user = await User.findById(req.user._id);
     if (!user || !user.squareRefreshToken) {
-      console.log("req.user has no token to revoke:", req.user)
+      console.log("req.user has no token to revoke:", user)
       return res.status(400).send('No token to revoke');
     }
     console.log("Attempting to revoke access token");
@@ -70,7 +71,7 @@ export const revoke = async (req, res) => {
     user.squareTokenExpiry = undefined;
     console.log("Saving user without tokens:", user);
     await user.save();
-    
+    console.log("User saved, redirecting to home page");
     res.redirect('/');
   } catch (error) {
     res.status(500).send('Revoke Error');
