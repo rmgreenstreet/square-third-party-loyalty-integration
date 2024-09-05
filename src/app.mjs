@@ -14,8 +14,8 @@ import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
-import winston from "winston";
-require("winston-mongodb");
+import { createLogger, format, transports } from "winston";
+import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
 import connectToMongoose from './utils/connectToMongoose.mjs';
@@ -38,9 +38,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 
+// Logging setup
 app.use(morgan(mongooseConnection,
  'dev'
 ));
+
+const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+    format.timestamp({
+      format: 'YYYY-MM-DD HH:mm:ss'
+    }),
+    format.errors({ stack: true }),
+    format.splat(),
+    format.json()
+  ),
+  defaultMeta: { service: 'Square Third Party Loyalty Integration' }
+});
+
+logger.add (new winston.transports.MongoDB(mongooseConnection));
+
+//
+// If we're not in production then **ALSO** log to the `console`
+// with the colorized simple format.
+//
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new transports.Console({
+    format: format.combine(
+      format.colorize(),
+      format.simple()
+    )
+  }));
+}
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -49,7 +78,7 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 // Initialize Passport and other middlewares
-var sess = {
+let sess = {
   secret: 'keyboard cat',
   saveUninitialized: true,
   resave: false,
