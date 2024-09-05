@@ -33,7 +33,6 @@ export const oauthCallback = async (req, res) => {
       redirectUri: process.env.SQUARE_REDIRECT_URI,
       grantType: "authorization_code"
     });
-    console.log("obtainToken response:",response);
     console.log("Tokens obtained. Encrypting and saving to database");
     const { accessToken, refreshToken, expiresAt } = response.result;
     const encryptedAccessToken = encrypt(accessToken);
@@ -44,7 +43,7 @@ export const oauthCallback = async (req, res) => {
     user.squareRefreshToken = refreshToken;
     user.squareTokenExpiry = new Date(expiresAt); // Convert to JavaScript Date
     await user.save();
-    
+    console.log("Tokens saved to user");
     res.redirect('/');
   } catch (error) {
     console.log(error);
