@@ -69,7 +69,10 @@ console.log("attempting connect to mongodb with winston");
 logger.add(new winston.transports.MongoDB({
   collection: "httpLogs",
   db: process.env.DB_CONNECTION_STRING,
-  dbName: process.env.DB_NAME
+  dbName: process.env.DB_NAME,
+  options: {
+    useUnifiedTopology: true
+  }
 }));
 
 //
