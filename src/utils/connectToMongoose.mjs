@@ -1,11 +1,5 @@
 import mongoose from 'mongoose';
 
-export const dbConnectOptions = {
-  collection: "httpLogs",
-  connectionString: process.env.DB_CONNECTION_STRING,
-  dbName: process.env.DB_NAME
-};
-
 const maxRetries = 5; // Number of attempts
 
 async function connectToMongoose(delay = 250) { // Default delay value
@@ -15,7 +9,7 @@ async function connectToMongoose(delay = 250) { // Default delay value
     attempts++;
 
     try {
-      const mongooseConnection = await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME }).asPromise();
+      const mongooseConnection = await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME });
       console.log(`Mongoose Connected to MongoDB`);
       return mongooseConnection;
     } catch (err) {

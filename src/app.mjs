@@ -20,7 +20,7 @@ import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
 // Import build database utils
-import connectToMongoose, { dbConnectOptions } from './utils/connectToMongoose.mjs';
+import connectToMongoose from './utils/connectToMongoose.mjs';
 
 // Import routes
 import authRoutes from './routes/authRoutes.mjs';
@@ -43,7 +43,11 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 // Logging setup
-app.use(morgan(dbConnectOptions,
+app.use(morgan({
+  collection: "httpLogs",
+  connectionString: process.env.DB_CONNECTION_STRING,
+  dbName: process.env.DB_NAME
+},
   {},
   'dev'
 ));
@@ -61,8 +65,12 @@ const logger = createLogger({
   defaultMeta: { service: 'Square Third Party Loyalty Integration' }
 });
 
-console.log("attempting to pass mongooseConnection to winston");
-logger.add(new winston.transports.MongoDB(dbConnectOptions));
+console.log("attempting connect to mongodb with winston");
+logger.add(new winston.transports.MongoDB({
+  collection: "httpLogs",
+  db: process.env.DB_CONNECTION_STRING,
+  dbName: process.env.DB_NAME
+}));
 
 //
 // If we're not in production then **ALSO** log to the `console`
