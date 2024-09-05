@@ -9,7 +9,7 @@ async function connectToMongoose(delay = 250) { // Default delay value
     attempts++;
 
     try {
-      const mongooseConnection = await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME });
+      const mongooseConnection = await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME }).asPromise();
       console.log(`Mongoose Connected to MongoDB`);
       return mongooseConnection;
     } catch (err) {
