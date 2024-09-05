@@ -31,7 +31,8 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
-    "square": "^38.0.0"
+    "square": "^38.0.0",
+    "winston-loggly-bulk": "^3.3.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

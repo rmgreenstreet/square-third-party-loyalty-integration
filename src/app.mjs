@@ -14,6 +14,8 @@ import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
+import winston from "winston";
+import { Loggly } from "winston-loggly-bulk";
 
 import connectToMongoose from './utils/connectToMongoose.mjs';
 
@@ -27,6 +29,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Logging Setup
+winston.add(new Loggly({
+  token: "457fd6e9-b4e7-4a01-b44f-7eb5e24b659a",
+  subdomain: "greenstreetr",
+  tags: ["Winston-NodeJS"],
+  json: true
+}));
+
+winston.log('info', "Hello World from Node.js!");
 
 
 // Middleware and routes setup
