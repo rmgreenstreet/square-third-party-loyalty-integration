@@ -65,7 +65,7 @@ export const revoke = async (req, res) => {
       clientId: process.env.SQUARE_CLIENT_ID,
       accessToken: decrypt(user.squareAccessToken)
     },
-      process.env.SQUARE_CLIENT_SECRET);
+      `Client ${process.env.SQUARE_CLIENT_SECRET}`);
     console.log("revokeToken response:", response);
 
     user.squareAccessToken = undefined;
