@@ -30,17 +30,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Logging Setup
-winston.add(new Loggly({
-  token: "457fd6e9-b4e7-4a01-b44f-7eb5e24b659a",
-  subdomain: "greenstreetr",
-  tags: ["Winston-NodeJS"],
-  json: true
-}));
-
-winston.log('info', "Hello World from Node.js!");
-
-
 // Middleware and routes setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
