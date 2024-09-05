@@ -4,6 +4,7 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }; 
 
+// Import dependencies
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,11 +19,14 @@ import { createLogger, format, transports } from "winston";
 import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
+// Import build utils
 import connectToMongoose from './utils/connectToMongoose.mjs';
 
+// Import routes
 import authRoutes from './routes/authRoutes.mjs';
 import squareRoutes from './routes/squareRoutes.mjs';
 
+// Import models
 import User from "./models/User.mjs"
 
 // Get the resolved path to the file and directory
@@ -39,7 +43,11 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 // Logging setup
-app.use(morgan(mongooseConnection,
+app.use(morgan({
+  collection: "httpLogs",
+  connectionString: process.env.DB_CONNECTION_STRING,
+  dbName: process.env.DB_NAME
+},
  'dev'
 ));
 
