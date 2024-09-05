@@ -53,9 +53,9 @@ export const refreshAccessToken = async (user) => {
       client_secret: process.env.SQUARE_APP_SECRET,
     });
 
-    if (response.result.access_token) {
-      user.squareAccessToken = encrypt(response.result.access_token);
-      user.squareRefreshToken = encrypt(response.result.refresh_token);
+    if (response.result.accessToken && response.result.refreshToken) {
+      user.squareAccessToken = encrypt(response.result.accessToken);
+      user.squareRefreshToken = encrypt(response.result.refreshToken);
       await user.save(); // Save updated tokens to the user
     }
 

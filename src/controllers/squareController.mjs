@@ -52,17 +52,23 @@ export const oauthCallback = async (req, res) => {
 };
 
 export const revoke = async (req, res) => {
+  console.log("Entering token revoke route");
   try {
-    const { user } = req;
-    if (!user || !user.squareRefreshToken) return res.status(400).send('No token to revoke');
-
+    const user = await User.findById(req.user._id);
+    if (!user || !user.squareRefreshToken) {
+      console.log("req.user has no token to revoke:", req.user)
+      return res.status(400).send('No token to revoke');
+    }
+    console.log("Attempting to revoke access token");
     const response = await oAuthApi.revokeToken({ 
-      token: user.squareRefreshToken 
+      token: decrypt(user.squareRefreshToken)
     });
+    console.log("revokeToken response:", response);
     
     user.squareAccessToken = undefined;
     user.squareRefreshToken = undefined;
     user.squareTokenExpiry = undefined;
+    console.log("Saving user without tokens:", user);
     await user.save();
     
     res.redirect('/');
