@@ -21,7 +21,7 @@ export const isSquareAuthorized = async (user) => {
   }
 
   try {
-    const client = createSquareClient(user.squareAccessToken);
+    const client = await createSquareClient(decrypt(user.squareAccessToken));
     const { customersApi } = client;
 
     // Attempt to make an API call to check if the token is valid
