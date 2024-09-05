@@ -57,7 +57,7 @@ export const revoke = async (req, res) => {
     console.log("attempting to retrieve logged in user using req.user:", req.user);
     const user = await User.findById(req.user._id);
     if (!user || !user.squareRefreshToken) {
-      console.log("req.user has no token to revoke:", user)
+      console.log("user has no token to revoke:", user)
       return res.status(400).send('No token to revoke');
     }
     console.log("Attempting to revoke access token");
@@ -65,7 +65,7 @@ export const revoke = async (req, res) => {
       clientId: process.env.SQUARE_CLIENT_ID,
       accessToken: decrypt(user.squareAccessToken)
     },
-      null);
+      process.env.SQUARE_CLIENT_SECRET);
     console.log("revokeToken response:", response);
 
     user.squareAccessToken = undefined;
