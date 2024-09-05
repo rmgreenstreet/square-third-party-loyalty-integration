@@ -1,10 +1,8 @@
-// Conditionally load dotenv only in development
 if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then(async ({ config }) => {
-    const dotenvConfig = await config(); // Load environment variables
-    console.log("dotenvConfig:", dotenvConfig);
+  import('dotenv').then(({ config }) => { 
+    config() // Load environment variables
   });
-};
+}; 
 
 import express from 'express';
 import path from 'path';
@@ -30,6 +28,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+
 // Middleware and routes setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -44,7 +43,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 // Initialize Passport and other middlewares
 var sess = {
   secret: 'keyboard cat',
-  saveUninitialized: true, 
+  saveUninitialized: true,
   resave: false,
   cookie: {}
 };
