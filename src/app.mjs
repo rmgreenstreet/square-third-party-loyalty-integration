@@ -66,6 +66,7 @@ const logger = createLogger({
   defaultMeta: { service: 'Square Third Party Loyalty Integration' }
 });
 
+console.log("attempting to pass mongooseConnection to winston:", mongooseConnection);
 logger.add(new winston.transports.MongoDB(mongooseConnection));
 
 //
