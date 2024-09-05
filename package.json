@@ -27,12 +27,14 @@
     "hvac": "^1.0.0",
     "method-override": "^3.0.0",
     "mongoose": "^7.0.0",
+    "mongoose-morgan": "^1.0.17",
     "node-fetch": "^3.3.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
     "square": "^38.0.0",
-    "winston-loggly-bulk": "^3.3.1"
+    "winston": "^3.14.2",
+    "winston-mongodb": "^5.1.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",

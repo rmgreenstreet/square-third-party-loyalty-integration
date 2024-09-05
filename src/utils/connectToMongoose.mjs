@@ -9,8 +9,9 @@ async function connectToMongoose(delay = 250) { // Default delay value
     attempts++;
 
     try {
-      await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: 'thirdPartyLoyaltyIntegration' });
+      const mongooseConnection = await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME });
       console.log(`Mongoose Connected to MongoDB`);
+      return mongooseConnection;
     } catch (err) {
       console.error(`Failed to connect to MongoDB (attempt ${attempts}): ${err.message}`);
 

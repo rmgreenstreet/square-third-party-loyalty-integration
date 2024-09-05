@@ -15,7 +15,8 @@ import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
 import winston from "winston";
-import { Loggly } from "winston-loggly-bulk";
+require("winston-mongodb");
+import morgan from "mongoose-morgan";
 
 import connectToMongoose from './utils/connectToMongoose.mjs';
 
@@ -28,12 +29,18 @@ import User from "./models/User.mjs"
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const mongooseConnection = await connectToMongoose(1000);
+
 const app = express();
 
 // Middleware and routes setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
+
+app.use(morgan(mongooseConnection,
+ 'dev'
+));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -76,8 +83,6 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
-
-await connectToMongoose(1000);
 
 // Use the routes
 app.use('/', authRoutes);
