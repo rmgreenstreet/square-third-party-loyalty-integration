@@ -45,8 +45,14 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 // Use Morgan to log all http requests
 app.use(morganLogger);
-// Make winston logger available in any route handlers not using routers/controllers
-app.use((req,res,next) => {req.logger = winstonLogger; next()});
+// Use flash and winston logger in all routes, make current user available in routes
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.user = req.user;
+  req.logger = winstonLogger;
+  next();
+});
 
 // Set up ejs views
 app.set("views", path.join(__dirname, "views"));
@@ -84,13 +90,6 @@ passport.use(new LocalStrategy({
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.user = req.user;
-  next();
-});
 
 // Use the routes
 app.use('/', authRoutes);
