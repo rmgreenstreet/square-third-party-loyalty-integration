@@ -12,7 +12,7 @@ const morganLogger = await morgan({
     'dev'
 );
 
-const logger = createLogger({
+const winstonLogger = createLogger({
     level: 'info',
     format: format.combine(
         format.timestamp({
