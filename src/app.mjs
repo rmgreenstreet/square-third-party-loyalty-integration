@@ -26,6 +26,7 @@ import squareRoutes from './routes/squareRoutes.mjs';
 
 // Import models
 import User from "./models/User.mjs"
+import globalErrorHandler from './middleware/globalErrorHandler.mjs';
 
 // Get the resolved path to the file and directory
 const __filename = fileURLToPath(import.meta.url);
@@ -35,8 +36,15 @@ await connectToMongoose(1000);
 
 const app = express();
 
-// Middleware and routes setup
+// Set up ejs views
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.engine("ejs", ejsMate);
 
+// Set up public directory for frontend files
+app.use(express.static(path.join(__dirname, "/public")));
+
+// Middleware and routes setup
 // Parse urlEncoded POST requests
 app.use(express.urlencoded({ extended: true }));
 // Parse JSON POST requests
@@ -53,14 +61,8 @@ app.use((req, res, next) => {
   req.logger = winstonLogger;
   next();
 });
-
-// Set up ejs views
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.engine("ejs", ejsMate);
-
-// Set up public directory for frontend files
-app.use(express.static(path.join(__dirname, "/public")));
+// Use global error handler
+app.use(globalErrorHandler);
 
 // Initialize Passport and other middlewares
 let sess = {
