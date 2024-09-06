@@ -26,6 +26,8 @@ import squareRoutes from './routes/squareRoutes.mjs';
 
 // Import models
 import User from "./models/User.mjs"
+
+import setupMiddleware from './middleware/middlewareSetup.mjs';
 import globalErrorHandler from './middleware/globalErrorHandler.mjs';
 
 // Get the resolved path to the file and directory
@@ -53,45 +55,45 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 // Use Morgan to log all http requests
 app.use(morganLogger);
-// Use flash and winston logger in all routes, make current user available in routes
+// Use winston logger in all routes, make current user available in routes
 app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.user = req.user;
   req.logger = winstonLogger;
   next();
 });
+// Use passport, session, and flash setup
+setupMiddleware(app);
+
 // Use global error handler
 app.use(globalErrorHandler);
 
-// Initialize Passport and other middlewares
-let sess = {
-  secret: 'keyboard cat',
-  saveUninitialized: true,
-  resave: false,
-  cookie: {}
-};
+// // Initialize Passport and other middlewares
+// let sess = {
+//   secret: 'keyboard cat',
+//   saveUninitialized: true,
+//   resave: false,
+//   cookie: {}
+// };
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
-};
+// if (app.get('env') === 'production') {
+//   app.set('trust proxy', 1) // trust first proxy
+//   sess.cookie.secure = true // serve secure cookies
+// };
 
-app.use(session(sess));
-app.use(flash());
+// app.use(session(sess));
+// app.use(flash());
 
-app.use(connectFlash());
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(connectFlash());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-passport.use(new LocalStrategy({
-  usernameField: "email"
-},
-  User.authenticate()
-));
+// passport.use(new LocalStrategy({
+//   usernameField: "email"
+// },
+//   User.authenticate()
+// ));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 // Use the routes
 app.use('/', authRoutes);
