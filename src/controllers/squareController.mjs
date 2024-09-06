@@ -82,6 +82,6 @@ export const revoke = async (req, res, next) => {
     logger.info("Square Token revoked", {user: user.id});
     res.redirect('/');
   } catch (err) {
-    next(new ApplicationError("There was an issue revoking Square tokens", {user: req.user.id, name: "SquareRevokeError", err}))
+    next(new ApplicationError("There was an issue revoking Square tokens", {user: req.user.id, name: "SquareRevokeError", err}));
   }
 };
