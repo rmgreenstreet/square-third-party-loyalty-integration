@@ -67,7 +67,7 @@ const logger = createLogger({
 
 console.log("attempting connect to mongodb with winston");
 logger.add(new winston.transports.MongoDB({
-  collection: "httpLogs",
+  collection: "activityLogs",
   db: process.env.DB_CONNECTION_STRING,
   dbName: process.env.DB_NAME,
   options: {
