@@ -1,9 +1,12 @@
 import crypto from 'crypto';
 
+import { logger } from "./loggingSetup.mjs"
+
 const algorithm = 'aes-256-cbc';
 const ivLength = 16;
 
 export function encrypt(text) {
+  logger.debug("Entering encrypt function")
   const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // Convert the hex key string to a Buffer
   const iv = crypto.randomBytes(ivLength);
   const cipher = crypto.createCipheriv(algorithm, key, iv);
@@ -13,6 +16,7 @@ export function encrypt(text) {
 }
 
 export function decrypt(text) {
+  logger.debug("Entering decrypt function");
   const textParts = text.split(':');
   const iv = Buffer.from(textParts.shift(), 'hex');
   const encryptedText = textParts.join(':');

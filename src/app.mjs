@@ -15,12 +15,10 @@ import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
 import flash from "connect-flash";
-import winston, { createLogger, format, transports } from "winston";
-import "winston-mongodb";
-import morgan from "mongoose-morgan";
 
-// Import build database utils
+// Import build utils
 import connectToMongoose from './utils/connectToMongoose.mjs';
+import { winstonLogger, morganLogger } from "./utils/loggingSetup.mjs"
 
 // Import routes
 import authRoutes from './routes/authRoutes.mjs';
@@ -38,60 +36,24 @@ await connectToMongoose(1000);
 const app = express();
 
 // Middleware and routes setup
+
+// Parse urlEncoded POST requests
 app.use(express.urlencoded({ extended: true }));
+// Parse JSON POST requests
 app.use(express.json());
+// Use methodOverride to enable requests like "PUT" or "DELETE"
 app.use(methodOverride("_method"));
+// Use Morgan to log all http requests
+app.use(morganLogger);
+// Make winston logger available in any route handlers not using routers/controllers
+app.use((req,res,next) => {req.logger = winstonLogger; next()});
 
-// Logging setup
-app.use(morgan({
-  collection: "httpLogs",
-  connectionString: process.env.DB_CONNECTION_STRING,
-  dbName: process.env.DB_NAME
-},
-  {},
-  'dev'
-));
-
-const logger = createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
-    }),
-    format.errors({ stack: true }),
-    format.splat(),
-    format.json()
-  ),
-  defaultMeta: { service: 'Square Third Party Loyalty Integration' }
-});
-
-console.log("attempting connect to mongodb with winston");
-logger.add(new winston.transports.MongoDB({
-  collection: "activityLogs",
-  db: process.env.DB_CONNECTION_STRING,
-  dbName: process.env.DB_NAME,
-  options: {
-    useUnifiedTopology: true
-  }
-}));
-
-//
-// If we're not in production then **ALSO** log to the `console`
-// with the colorized simple format.
-//
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({
-    format: format.combine(
-      format.colorize(),
-      format.simple()
-    )
-  }));
-}
-
+// Set up ejs views
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.engine("ejs", ejsMate);
 
+// Set up public directory for frontend files
 app.use(express.static(path.join(__dirname, "/public")));
 
 // Initialize Passport and other middlewares
@@ -134,16 +96,16 @@ app.use((req, res, next) => {
 app.use('/', authRoutes);
 app.use('/square', squareRoutes);
 
+//Health check route for render.com
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
+// Catch route for any routes not specifically handled
 app.all("*", (req, res) => {
   console.log("Invalid path request for", req.path);
   res.status(404).send("Invalid path");
-})
-
-// Error handling and other middlewares
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
