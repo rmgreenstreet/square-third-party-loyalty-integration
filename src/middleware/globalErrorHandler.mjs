@@ -2,6 +2,10 @@ export default function globalErrorHandler(err, req, res, next) {
     // Determine the status code
     const statusCode = err.statusCode || 500;
     const errorMessage = err.message || 'Internal Server Error';
+    let redirectUrl = "/error";
+    if (statusCode === 400) {
+        redirectUrl = "/login";
+    }
     if (err instanceof ApplicationError) {
         // Log the error with custom fields if it's an instance of ApplicationError
         logger.error(err.message, {
@@ -18,5 +22,5 @@ export default function globalErrorHandler(err, req, res, next) {
         });
     };
     req.flash("error", errorMessage);
-    res.status(statusCode).redirect("/error");
+    res.status(statusCode).redirect(redirectUrl);
 }

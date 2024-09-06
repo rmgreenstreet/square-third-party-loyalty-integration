@@ -1,4 +1,5 @@
-import User from '../models/User.mjs';
+import { winstonLogger as logger } from "../utils/loggingSetup.mjs";
+import ApplicationError from "../models/ApplicationError.mjs";import User from '../models/User.mjs';
 import { encrypt, decrypt } from '../utils/tokenUtils.mjs';
 import { createSquareClient } from '../utils/squareUtils.mjs';
 
@@ -8,24 +9,26 @@ const environment = process.env.NODE_ENV === 'production' ? "" : "sandbox";
 const sessionArg = environment === "sandbox" ? "" : "&session=false";
 
 export const authorize = async (req, res) => {
+  logger.debug("Entering Square Authorize redirect controller");
   try {
     const authorizationUrl = `https://connect.squareup${environment}.com/oauth2/authorize?client_id=${process.env.SQUARE_CLIENT_ID}&scope=PAYMENTS_READ+CUSTOMERS_READ+ORDERS_READ+LOYALTY_READ+LOYALTY_WRITE&state=${req.sessionID}${sessionArg}`;
+    logger.info("Redirecting user to square authorization", {user: req.user.id})
     res.redirect(authorizationUrl);
-  } catch (error) {
-    res.status(500).send('Authorization Error');
+  } catch (err) {
+    next(new ApplicationError("There was an issue redirecting to Square", {user: req.user.id, name: "SquareAuthRedirectError", err}));
   }
 };
 
-export const oauthCallback = async (req, res) => {
+export const oauthCallback = async (req, res, next) => {
   try {
-    console.log("Entering oauthCallBack");
+    logger.debug("Entering Square oauthCallback controller");
     // if (req.state !== req.sessionID) {
     //   res.status(403).send("There was a security issue. Try the OAuth integration again");
     // }
     const { code } = req.query;
-    console.log(code);
+    logger.debug(`Square Auth Code: ${code}`);
 
-    console.log("Attempting to get OAuth Token");
+    logger.debug("Attempting to get OAuth Token");
     const response = await oAuthApi.obtainToken({
       code,
       clientId: process.env.SQUARE_CLIENT_ID,
@@ -33,50 +36,52 @@ export const oauthCallback = async (req, res) => {
       redirectUri: process.env.SQUARE_REDIRECT_URI,
       grantType: "authorization_code"
     });
-    console.log("Tokens obtained. Encrypting and saving to database");
+    logger.debug("Tokens obtained. Encrypting and saving to database");
     const { accessToken, refreshToken, expiresAt } = response.result;
     const encryptedAccessToken = encrypt(accessToken);
-
-    console.log("Attempting to save Tokens to User");
-    const user = await User.findById(req.user._id);
-    user.squareAccessToken = encryptedAccessToken;
-    user.squareRefreshToken = refreshToken;
-    user.squareTokenExpiry = new Date(expiresAt); // Convert to JavaScript Date
-    await user.save();
-    console.log("Tokens saved to user. Redirecting to home page");
+    const encryptedRefreshToken = encrypt(refreshToken)
+    try {
+      logger.debug("Attempting to save Tokens to User");
+      const user = await User.findById(req.user._id);
+      user.squareAccessToken = encryptedAccessToken;
+      user.squareRefreshToken = encryptedRefreshToken;
+      user.squareTokenExpiry = new Date(expiresAt); // Convert to JavaScript Date
+      await user.save();
+    } catch (err) {
+      next(new ApplicationError("There was an issue saving Square Authorization tokens", {user: req.user.id, name: "SquareoAuthTokenError", err}));
+    }
+    logger.debug("Tokens saved to user. Redirecting to home page");
     res.redirect('/');
-  } catch (error) {
-    console.log(error);
-    res.status(500).send('OAuth Callback Error');
+  } catch (err) {
+    next(new ApplicationError("There was an issue obtaining Square Authorization tokens", {user: req.user.id, name: "SquareoAuthTokenError", err}));
   }
 };
 
-export const revoke = async (req, res) => {
-  console.log("Entering token revoke route");
+export const revoke = async (req, res, next) => {
+  logger.debug("Entering Square token revoke controller");
   try {
-    console.log("attempting to retrieve logged in user using req.user:", req.user);
+    logger.debug(`attempting to retrieve logged in user using req.user: ${req.user}`);
     const user = await User.findById(req.user._id);
     if (!user || !user.squareRefreshToken) {
-      console.log("user has no token to revoke:", user)
-      return res.status(400).send('No token to revoke');
+      next(new ApplicationError("There is no Token to revoke", {name: "NoSquareTokenError", statusCode: 400, err}));
     }
-    console.log("Attempting to revoke access token");
+
+    logger.debug("Attempting to revoke access token");
     const response = await oAuthApi.revokeToken({
       clientId: process.env.SQUARE_CLIENT_ID,
       accessToken: decrypt(user.squareAccessToken)
     },
       `Client ${process.env.SQUARE_CLIENT_SECRET}`);
-    console.log("revokeToken response:", response);
+    logger.debug(`revokeToken response: ${response}`);
 
     user.squareAccessToken = undefined;
     user.squareRefreshToken = undefined;
     user.squareTokenExpiry = undefined;
-    console.log("Saving user without tokens:", user);
+    logger.debug("Saving user without tokens:", user);
     await user.save();
-    console.log("User saved, redirecting to home page");
+    logger.info("Square Token revoked", {user: user.id});
     res.redirect('/');
-  } catch (error) {
-    console.error("Error revoking token:", error);
-    res.status(500).send('Revoke Error');
+  } catch (err) {
+    next(new ApplicationError("There was an issue revoking Square tokens", {user: req.user.id, name: "SquareRevokeError", err}))
   }
 };

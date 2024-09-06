@@ -1,7 +1,7 @@
 import { winstonLogger as logger } from "../utils/loggingSetup.mjs";
+import ApplicationError from "../models/ApplicationError.mjs";
 import { isSquareAuthorized } from "../utils/squareUtils.mjs"
 import User from "../models/User.mjs";
-import ApplicationError from "../models/ApplicationError.mjs";
 
 export const getHome = async (req, res) => {
   logger.debug("Entering getHome controller");
@@ -14,7 +14,7 @@ export const getHome = async (req, res) => {
   }
 };
 
-export const getRegister = async (req, res) => {
+export const getRegister = async (req, res, next) => {
   logger.debug("Entering getRegister controller");
   if (req.user) {
     logger.debug("User is logged in, redirecting to Home");
@@ -25,7 +25,7 @@ export const getRegister = async (req, res) => {
   res.render("users/register");
 };
 
-export const postRegister = async (req, res) => {
+export const postRegister = async (req, res, next) => {
   logger.debug("Entering postRegister controller");
   try {
     const { email, password } = req.body;
@@ -48,7 +48,7 @@ export const postRegister = async (req, res) => {
   }
 };
 
-export const getLogin = async (req, res) => {
+export const getLogin = async (req, res, next) => {
   logger.debug("Entering getLogin controller");
   try {
     if (req.user) {
@@ -63,7 +63,7 @@ export const getLogin = async (req, res) => {
   };
 };
 
-export const getLogout = (req, res) => {
+export const getLogout = (req, res, next) => {
   logger.debug("Entering getLogout controller");
   req.logout(function (err) {
     if (err) {
