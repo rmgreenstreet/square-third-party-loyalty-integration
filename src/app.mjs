@@ -52,6 +52,11 @@ app.use(morgan({
   'dev'
 ));
 
+let winstonTransports = [];
+if (process.env.NODE_ENV !== "production") {
+  winstonTransports.push(new transports.Console())
+}
+
 const logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -62,6 +67,7 @@ const logger = createLogger({
     format.splat(),
     format.json()
   ),
+  transports: winstonTransports,
   defaultMeta: { service: 'Square Third Party Loyalty Integration' }
 });
 
