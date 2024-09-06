@@ -21,8 +21,8 @@ export function encrypt(text) {
     iv = null;
     logger.info("Text has been encrypted using", algorithm)
     return `${iv.toString('hex')}:${encrypted}`;
-  } catch (error) {
-    throw new ApplicationError("There was an issue encrypting the value", {err: error, statusCode: 500, name: "EncryptionError"});
+  } catch (err) {
+    throw new ApplicationError("There was an issue encrypting the value", {err, statusCode: 500, name: "EncryptionError"});
   }
 }
 
@@ -43,7 +43,7 @@ export function decrypt(text) {
     iv = null;
     logger.info("Text has been decrypted using", algorithm)
     return decrypted;
-  } catch (error) {
-    throw new ApplicationError("There was an issue decrypting the value", {err: error, statusCode: 500, name: "EncryptionError"});
+  } catch (err) {
+    throw new ApplicationError("There was an issue decrypting the value", {err, statusCode: 500, name: "EncryptionError"});
   }
 }

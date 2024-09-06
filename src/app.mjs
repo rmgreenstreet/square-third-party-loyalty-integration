@@ -47,12 +47,16 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 // Middleware and routes setup
+// Use passport, session, and flash setup
+setupMiddleware(app);
 // Parse urlEncoded POST requests
 app.use(express.urlencoded({ extended: true }));
 // Parse JSON POST requests
 app.use(express.json());
 // Use methodOverride to enable requests like "PUT" or "DELETE"
 app.use(methodOverride("_method"));
+// Use global error handler
+app.use(globalErrorHandler);
 // Use Morgan to log all http requests
 app.use(morganLogger);
 // Use winston logger in all routes, make current user available in routes
@@ -60,11 +64,6 @@ app.use((req, res, next) => {
   req.logger = winstonLogger;
   next();
 });
-// Use passport, session, and flash setup
-setupMiddleware(app);
-
-// Use global error handler
-app.use(globalErrorHandler);
 
 // // Initialize Passport and other middlewares
 // let sess = {
