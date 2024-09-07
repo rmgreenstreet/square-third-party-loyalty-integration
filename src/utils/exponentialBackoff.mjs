@@ -9,10 +9,15 @@ export async function exponentialBackoff(fn, maxRetries = 10, baseDelay = 250) {
     try {
       return await fn();
     } catch (err) {
-      logger.debug(`Attempt ${attempt} failed`)
-      attempt += 1;
       const delay = baseDelay * Math.pow(2, attempt - 1);
-      if (attempt >= maxRetries) throw new ApplicationError(err);
+      logger.debug(`Attempt ${ attempt + 1 } failed, retrying in ${ delay/1000 } seconds`);
+      attempt += 1;
+      if (attempt >= maxRetries) {
+        // TODO Figure out how to do this more gracefully and potentially retry to start the process
+        const exponentialError = new ApplicationError({name: "ExponentialBackoffError", err});
+        logger.error(exponentialError);
+        throw exponentialError;
+      }
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
