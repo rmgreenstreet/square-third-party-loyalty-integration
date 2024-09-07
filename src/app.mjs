@@ -1,5 +1,4 @@
 import "./config/envConfig.mjs"
-console.log(process.env.DB_CONNECTION_STRING);
 
 // Import dependencies
 import express from 'express';
@@ -31,7 +30,7 @@ import globalErrorHandler from './middleware/globalErrorHandler.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-await connectToMongoose(1000);
+await connectToMongoose();
 
 const app = express();
 
