@@ -1,4 +1,5 @@
 import "./config/envConfig.mjs"
+console.log(process.env.DB_CONNECTION_STRING);
 
 // Import dependencies
 import express from 'express';

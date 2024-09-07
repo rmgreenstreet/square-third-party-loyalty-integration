@@ -2,6 +2,12 @@ import winston, { createLogger, format, transports } from "winston";
 import "winston-mongodb";
 import morgan from "mongoose-morgan";
 
+let loggingLevel = "info";
+
+if (process.env.NODE_ENV !== "production") {
+    loggingLevel = "debug"
+}
+
 // Logging setup
 const morganLogger = await morgan({
     collection: "httpLogs",
@@ -13,7 +19,7 @@ const morganLogger = await morgan({
 );
 
 const winstonLogger = createLogger({
-    level: 'info',
+    level: loggingLevel,
     format: format.combine(
         format.timestamp({
             format: 'YYYY-MM-DD HH:mm:ss'
