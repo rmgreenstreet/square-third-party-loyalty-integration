@@ -4,13 +4,8 @@ import "./config/envConfig.mjs"
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import session from 'express-session';
-import connectFlash from 'connect-flash';
-import passport from "passport";
-import LocalStrategy from "passport-local";
 import ejsMate from 'ejs-mate';
 import methodOverride from "method-override";
-import flash from "connect-flash";
 
 // Import build utils
 import connectToMongoose from './utils/connectToMongoose.mjs';
@@ -20,9 +15,7 @@ import { winstonLogger, morganLogger } from "./utils/loggingSetup.mjs"
 import authRoutes from './routes/authRoutes.mjs';
 import squareRoutes from './routes/squareRoutes.mjs';
 
-// Import models
-import User from "./models/User.mjs"
-
+// Import middleware
 import setupMiddleware from './middleware/middlewareSetup.mjs';
 import globalErrorHandler from './middleware/globalErrorHandler.mjs';
 
@@ -61,35 +54,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// // Initialize Passport and other middlewares
-// let sess = {
-//   secret: 'keyboard cat',
-//   saveUninitialized: true,
-//   resave: false,
-//   cookie: {}
-// };
-
-// if (app.get('env') === 'production') {
-//   app.set('trust proxy', 1) // trust first proxy
-//   sess.cookie.secure = true // serve secure cookies
-// };
-
-// app.use(session(sess));
-// app.use(flash());
-
-// app.use(connectFlash());
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// passport.use(new LocalStrategy({
-//   usernameField: "email"
-// },
-//   User.authenticate()
-// ));
-
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
 // Use the routes
 app.use('/', authRoutes);
 app.use('/square', squareRoutes);
@@ -101,11 +65,11 @@ app.get("/health", (req, res) => {
 
 // Catch route for any routes not specifically handled
 app.all("*", (req, res) => {
-  console.log("Invalid path request for", req.path);
+  logger.info(`Invalid path request for ${req.path}`);
   res.status(404).send("Invalid path");
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  winstonLogger.debug(`Server running on port ${PORT}`);
 });
