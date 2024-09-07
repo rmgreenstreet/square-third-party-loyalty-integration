@@ -11,10 +11,10 @@ async function connectToMongoose() {
       await mongoose.connect(process.env.DB_CONNECTION_STRING, { dbName: process.env.DB_NAME });
     }, 10, 250);
   } catch (err) {
-        // TODO Figure out how to do this more gracefully and potentially retry to start the process
-        const mongooseConnectionError = new ApplicationError({name: "MongooseConnectionError", err});
-        logger.error(mongooseConnectionError);
-        throw mongooseConnectionError;
+    // TODO Figure out how to do this more gracefully and potentially retry to start the process
+    const mongooseConnectionError = new ApplicationError({ name: "MongooseConnectionError", err });
+    logger.error(mongooseConnectionError);
+    throw mongooseConnectionError;
   }
 }
 

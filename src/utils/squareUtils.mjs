@@ -1,5 +1,8 @@
 import { Client, Environment } from 'square';
+
 import { encrypt, decrypt } from './tokenUtils.mjs';
+import { winstonLogger as logger } from "../utils/loggingSetup.mjs";
+import ApplicationError from "../models/ApplicationError.mjs";
 
 
 // Initialize Square client
