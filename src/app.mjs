@@ -1,8 +1,4 @@
-if (process.env.NODE_ENV !== 'production') {
-  import('dotenv').then(({ config }) => {
-    config() // Load environment variables
-  });
-};
+import "./config/envConfig.mjs"
 
 // Import dependencies
 import express from 'express';

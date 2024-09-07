@@ -26,7 +26,7 @@ const winstonLogger = createLogger({
 });
 
 console.log("attempting connect to mongodb with winston");
-logger.add(new winston.transports.MongoDB({
+winstonLogger.add(new winston.transports.MongoDB({
     collection: "activityLogs",
     db: process.env.DB_CONNECTION_STRING,
     dbName: process.env.DB_NAME,
@@ -40,7 +40,7 @@ logger.add(new winston.transports.MongoDB({
 // with the colorized simple format.
 //
 if (process.env.NODE_ENV !== 'production') {
-    logger.add(new transports.Console({
+    winstonLogger.add(new transports.Console({
         format: format.combine(
             format.colorize(),
             format.simple()

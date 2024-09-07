@@ -1,3 +1,6 @@
+import ApplicationError from "../models/ApplicationError.mjs";
+import { winstonLogger as logger } from "../utils/loggingSetup.mjs";
+
 export default function globalErrorHandler(err, req, res, next) {
     // Determine the status code
     const statusCode = err.statusCode || 500;

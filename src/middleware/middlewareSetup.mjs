@@ -3,7 +3,8 @@ import connectFlash from 'connect-flash';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 
-import User from '../models/User.mjs'; // Adjust the import path if necessary
+import User from '../models/User.mjs'; 
+import { winstonLogger } from '../utils/loggingSetup.mjs';
 
 export default function setupMiddleware(app) {
   // Session configuration

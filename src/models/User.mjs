@@ -11,3 +11,5 @@ const userSchema = new mongoose.Schema({
 userSchema.plugin(passportLocalMongoose, { usernameField: "email"});
 
 export default mongoose.model('User', userSchema);
+
+// TODO Add pre- and post- input validators
