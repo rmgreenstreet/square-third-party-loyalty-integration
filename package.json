@@ -5,7 +5,7 @@
   "main": "src/app.mjs",
   "start": "node src/app.mjs",
   "directories": {
-    "test": "tests"
+    "test": "src/__tests__"
   },
   "scripts": {
     "test": "jest"
