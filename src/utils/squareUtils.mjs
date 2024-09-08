@@ -14,7 +14,7 @@ const environment = process.env.NODE_ENV === 'production'
 export const createSquareClient = async (accessToken) => {
   logger.debug("Creating Square Client");
   try {
-    exponentialBackoff(async () => {
+    return exponentialBackoff(async () => {
       return await new Client({
         environment,
         accessToken: accessToken
