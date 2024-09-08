@@ -33,6 +33,7 @@ export const isSquareAuthorized = async (user) => {
   logger.debug("entering isSquareAuthorized");
   if (!user.squareAccessToken || !user.squareRefreshToken) {
     logger.debug("User does not have square access token");
+    logger.info("No access token found for user", { user: user.id });
     return false;
   }
   logger.debug("User has square access token, attempting to decrypt and use it");
@@ -49,11 +50,10 @@ export const isSquareAuthorized = async (user) => {
     logger.info(`User is Square Authorized: ${isAuthorized}`, { user: user.id });
     return isAuthorized
   } catch (error) {
-    // TODO Figure out how to do this more gracefully and potentially retry to start the process
-    const isSquareAuthorizedError = new ApplicationError({ name: "IsSquareAuthorizedError", err });
+    // TODO Figure out how to do this more gracefully and potentially restart the process
+    const isSquareAuthorizedError = new ApplicationError( "There was an issue verifying Square authorization", { user: user.id, name: "IsSquareAuthorizedError", err, statusCode: 500 });
     logger.error(isSquareAuthorizedError);
-    req.flash("error", "There was an issue verifying Square authorization");
-    return false;
+    throw isSquareAuthorizedError;
   }
 };
 

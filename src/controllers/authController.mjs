@@ -7,10 +7,10 @@ export const getHome = async (req, res) => {
   logger.debug("Entering getHome controller");
   try {
     const squareAuthorization = await isSquareAuthorized(req.user);
-    logger.info("Square Authorization checked", { squareAuthorization, user: req.user._id })
+    // logger.info("Square Authorization checked", { squareAuthorization, user: req.user._id })
     res.render("index", { squareAuthorization });
   } catch (err) {
-    next(new ApplicationError("There was an issue verifying Square Integration", { name: "SquareAuthError", err }));
+    next(err);
   }
 };
 
