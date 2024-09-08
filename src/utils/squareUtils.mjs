@@ -78,7 +78,8 @@ export const refreshAccessToken = async (user) => {
       logger.debug("Token refresh successful. Attempting to save new tokens");
       user.squareAccessToken = encrypt(response.result.accessToken);
       user.squareRefreshToken = encrypt(response.result.refreshToken);
-      await user.save(); // Save updated tokens to the user
+      await exponentialBackoff(user.save());
+      // await user.save(); // Save updated tokens to the user
       logger.info("Token Refresh successful", {user: user.id})
     }
     return true;
