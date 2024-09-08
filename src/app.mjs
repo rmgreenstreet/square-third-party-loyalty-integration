@@ -65,7 +65,6 @@ app.get("/health", (req, res) => {
 
 // Catch route for any routes not specifically handled
 app.all("*", (req, res) => {
-  logger.info(`Invalid path request for ${req.path}`);
   res.status(404).send("Invalid path");
 });
 
