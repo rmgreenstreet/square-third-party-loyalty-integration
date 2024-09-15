@@ -12,7 +12,8 @@ if (process.env.NODE_ENV !== "production") {
 const morganLogger = await morgan({
     collection: "httpLogs",
     connectionString: process.env.DB_CONNECTION_STRING,
-    dbName: process.env.DB_NAME
+    dbName: process.env.DB_NAME,
+    useNewUrlParser: true
 },
     {},
     'dev'
@@ -37,7 +38,8 @@ winstonLogger.add(new winston.transports.MongoDB({
     db: process.env.DB_CONNECTION_STRING,
     dbName: process.env.DB_NAME,
     options: {
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useNewUrlParser: true
     }
 }));
 
