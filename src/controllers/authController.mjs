@@ -1,6 +1,6 @@
 import { winstonLogger as logger } from "../utils/loggingSetup.mjs";
 import ApplicationError from "../models/ApplicationError.mjs";
-import { isSquareAuthorized } from "../utils/squareUtils.mjs"
+import { isSquareAuthorized } from "../utils/squareUtils.mjs";
 import User from "../models/User.mjs";
 
 export const getHome = async (req, res) => {

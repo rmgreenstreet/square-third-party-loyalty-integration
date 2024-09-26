@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive test"
   },
   "author": "Robert Greenstreet",
   "license": "SEE LICENSE IN LICENSE.TXT",
@@ -39,6 +39,8 @@
     "chai": "^5.1.1",
     "dotenv": "^16.4.5",
     "mocha": "^10.7.3",
-    "nock": "^13.5.5"
+    "nock": "^13.5.5",
+    "sinon": "^19.0.2",
+    "supertest": "^7.0.0"
   }
 }
