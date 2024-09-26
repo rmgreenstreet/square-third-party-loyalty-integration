@@ -5,10 +5,10 @@
   "main": "src/app.mjs",
   "start": "node src/app.mjs",
   "directories": {
-    "test": "src/__tests__"
+    "test": "test"
   },
   "scripts": {
-    "test": "jest"
+    "test": "mocha"
   },
   "author": "Robert Greenstreet",
   "license": "SEE LICENSE IN LICENSE.TXT",

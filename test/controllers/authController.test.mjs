@@ -1,4 +1,4 @@
-import "../src/config/envConfig.mjs"
+import "../../src/config/envConfig.mjs"
 
 import chai from 'chai';
 import nock from 'nock';
