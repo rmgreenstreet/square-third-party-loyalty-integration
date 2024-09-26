@@ -8,7 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --recursive test"
+    "test": "mocha --recursive test --exit"
   },
   "author": "Robert Greenstreet",
   "license": "SEE LICENSE IN LICENSE.TXT",

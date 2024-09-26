@@ -22,18 +22,19 @@ describe('getRegister controller', () => {
     });
 
     it('should redirect to home page if user is logged in', async () => {
-        const mockUser = { _id: 123 };
-        const mockReq = { user: mockUser };
+        const mockReq = {
+            user: { _id: 123 },
+            flash: sinon.spy()
+        };
         const mockRes = {
             redirect: sinon.spy(),
-            render: sinon.spy(),
-            flash: sinon.spy(),
+            render: sinon.spy()
         };
 
         await getRegister(mockReq, mockRes);
 
+        expect(mockReq.flash.calledOnceWith("error", "You are already logged in")).to.be.true;
         expect(mockRes.redirect.calledOnceWith('/')).to.be.true;
-        expect(mockRes.flash.calledOnceWith('You are already logged in')).to.be.true;
         expect(mockRes.render.notCalled).to.be.true;
     });
 
@@ -49,6 +50,20 @@ describe('getRegister controller', () => {
 
         expect(mockRes.redirect.notCalled).to.be.true;
         expect(mockRes.render.calledOnceWith('users/register')).to.be.true;
-        expect(mockRes.flash.notCalled).to.be.true;
     });
 });
+
+describe("postRegister controller", () => {
+    let sandbox;
+
+    beforeEach(() => {
+        sandbox = sinon.createSandbox();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    it("")
+
+})
