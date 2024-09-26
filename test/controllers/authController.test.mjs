@@ -3,12 +3,12 @@ import app from "../../src/app.mjs";
 import { getRegister, postRegister, getLogin, getLogout } from "../../src/controllers/authController.mjs";
 
 import { expect, assert, should } from 'chai';
-import { request } from "supertest";
+import request from "supertest";
 import nock from 'nock';
 import square from 'square';
 import sinon from "sinon";
 
-const appInstance = request(app);
+request(app);
 
 describe('getRegister controller', () => {
     let sandbox;
